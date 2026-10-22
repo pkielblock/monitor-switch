@@ -1,0 +1,8 @@
+{
+  "name": "monitor-switch",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun server.ts"
+  }
+}

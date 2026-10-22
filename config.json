@@ -1,0 +1,10 @@
+{
+  "monitor": "LG UltraFine 27US500-W",
+  "vcp": "xf4",
+  "i2cSourceAddr": "x50",
+  "inputs": [
+    { "id": "windows", "label": "Windows", "port": "HDMI 1", "value": "0x0090", "icon": "desktop" },
+    { "id": "ubuntu", "label": "Ubuntu", "port": "HDMI 2", "value": "0x0091", "icon": "server" },
+    { "id": "mac", "label": "Mac", "port": "DisplayPort", "value": "0x00d0", "icon": "laptop" }
+  ]
+}

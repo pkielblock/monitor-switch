@@ -1,0 +1,83 @@
+:root {
+  color-scheme: dark;
+  /* Rosé Pine (https://rosepinetheme.com) */
+  --base: #191724;
+  --surface: #1f1d2e;
+  --overlay: #26233a;
+  --hl-med: #403d52;
+  --text: #e0def4;
+  --muted: #908caa;
+  --love: #eb6f92;
+  --radius: 22px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; min-height: 100%; background: var(--base); color: var(--text); }
+
+body { min-height: 100dvh; overflow-x: hidden; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--overlay);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+main {
+  position: relative; z-index: 1;
+  max-width: 520px; margin: 0 auto; min-height: 100dvh;
+  padding: calc(env(safe-area-inset-top) + 28px) 20px calc(env(safe-area-inset-bottom) + 28px);
+  display: flex; flex-direction: column; gap: 28px;
+}
+
+header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+
+#lang { display: flex; padding: 3px; border-radius: 999px; flex: none; }
+#lang button {
+  border: 0; background: none; color: var(--muted); padding: 6px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; transition: background 0.2s, color 0.2s;
+}
+#lang button[aria-pressed="true"] { background: var(--overlay); color: var(--text); }
+
+#inputs { display: flex; flex-direction: column; gap: 14px; flex: 1; justify-content: center; }
+
+.card {
+  position: relative; width: 100%; border-radius: var(--radius);
+  padding: 20px; display: flex; align-items: center; gap: 16px; text-align: left;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { background: var(--overlay); }
+.card:active { transform: scale(0.97); background: var(--overlay); }
+.card .glyph {
+  width: 56px; height: 56px; border-radius: 18px; flex: none;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.card .glyph svg { width: 28px; height: 28px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.card .text { flex: 1; min-width: 0; }
+.card .label { display: block; font-size: 21px; font-weight: 600; }
+.card .port { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); }
+.card .badge {
+  font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+  color: var(--base); background: var(--accent); opacity: 0; transition: opacity 0.2s;
+}
+.card.last { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 8px 30px color-mix(in srgb, var(--accent) 18%, transparent); }
+.card.last .badge { opacity: 1; }
+.card.busy .glyph svg { animation: pulse 0.9s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+
+#toast {
+  position: fixed; z-index: 2; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 24px);
+  transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+  padding: 12px 20px; border-radius: 999px; font-size: 15px; font-weight: 500; white-space: nowrap;
+  transition: opacity 0.25s, transform 0.25s;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+#toast.err { color: var(--love); border-color: var(--love); }

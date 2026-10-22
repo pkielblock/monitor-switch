@@ -1,0 +1,22 @@
+services:
+  monitor-switch:
+    build: .
+    image: monitor-switch:latest
+    container_name: monitor-switch
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "7580:7580"
+    volumes:
+      - ./config.json:/app/config.json:ro
+    # Pass through the I2C buses of the GPU connected to the monitor
+    # (find them with `ddcutil detect`). Bus numbers can shift between boots,
+    # so listing all of them is the safe choice.
+    devices:
+      - /dev/i2c-0
+      - /dev/i2c-1
+      - /dev/i2c-2
+      - /dev/i2c-3
+      - /dev/i2c-4
+    group_add:
+      - "${I2C_GID:-107}" # host i2c group id: getent group i2c

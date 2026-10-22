@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Rosé Pine palette -->
+  <defs>
+    <clipPath id="tile"><rect width="1024" height="1024" rx="228"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect width="1024" height="1024" fill="#191724"/>
+    <!-- monitor -->
+    <rect x="172" y="232" width="680" height="440" rx="64" fill="#26233a" stroke="#c4a7e7" stroke-width="24"/>
+    <path d="M462 672h100l22 92H440z" fill="#403d52"/>
+    <rect x="352" y="760" width="320" height="44" rx="22" fill="#c4a7e7"/>
+    <!-- switch arrows -->
+    <g fill="none" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M352 392h300M582 322l70 70-70 70" stroke="#9ccfd8"/>
+      <path d="M672 532H372M442 462l-70 70 70 70" stroke="#ebbcba"/>
+    </g>
+  </g>
+</svg>
