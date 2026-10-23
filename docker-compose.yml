@@ -4,9 +4,10 @@ services:
     image: monitor-switch:latest
     container_name: monitor-switch
     restart: unless-stopped
+    networks:
+      - default
+      - nginxproxymanager_default
     env_file: .env
-    ports:
-      - "7580:7580"
     volumes:
       - ./config.json:/app/config.json:ro
     # Pass through the I2C buses of the GPU connected to the monitor
@@ -20,3 +21,7 @@ services:
       - /dev/i2c-4
     group_add:
       - "${I2C_GID:-107}" # host i2c group id: getent group i2c
+
+networks:
+  nginxproxymanager_default:
+    external: true
