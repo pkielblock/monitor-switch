@@ -4,7 +4,7 @@ type Config = {
   vcp: string;
   i2cSourceAddr?: string;
   inputs: Input[];
-  power?: Record<string, string>; // state -> VCP D6 value, e.g. { "standby": "0x02" }
+  power?: Record<string, string>; // state -> VCP D6 value, e.g. { "off": "0x04" }
 };
 
 // Monitor-specific DDC/CI settings live in config.json (see README).
