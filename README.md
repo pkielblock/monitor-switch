@@ -9,7 +9,7 @@ switch inputs from a browser, a dashboard, or the native iPhone app in
 
 > [!IMPORTANT]
 > This was built for and tested on **one specific monitor: the LG UltraFine
-> 27US500-W**, with an Intel iGPU on Ubuntu Server. The default
+> 27US500-W**, with an Intel iGPU on the server. The default
 > [`config.json`](config.json) holds that monitor's values. Other monitors
 > (including other LG models) may need different commands or values; see
 > [Adapting to another monitor](#adapting-to-another-monitor).
@@ -28,9 +28,9 @@ My setup:
 
 | Button  | Port        | Device                     |
 |---------|-------------|----------------------------|
-| Windows | HDMI 1      | Windows PC                 |
-| Ubuntu  | HDMI 2      | Ubuntu Server (runs this)  |
-| Mac     | DisplayPort | MacBook                    |
+| desktop | HDMI 1      | Desktop (Omarchy)          |
+| server  | HDMI 2      | Server (runs this)         |
+| macbook | DisplayPort | MacBook                    |
 
 ### LG 27US500-W quirk
 
@@ -161,7 +161,7 @@ of URL**: method `POST`, URL `https://<host>/api/input/<id>`.
 | `POST` | `/api/input/{id}`  | Switch to the input with that `id`   |
 
 ```sh
-curl -X POST https://<host>/api/input/mac
+curl -X POST https://<host>/api/input/macbook
 ```
 
 Every switch request is logged to stdout as JSON (time, client IP, input,
