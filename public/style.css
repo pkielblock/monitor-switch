@@ -73,16 +73,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .card.busy .glyph svg { animation: pulse 0.9s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: 0.3; } }
 
-#power { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 8px; border-radius: var(--radius); }
-#power:empty { display: none; }
-.power-label { flex: 1; padding-left: 12px; font-size: 14px; color: var(--muted); }
-.power-btn {
-  border: 0; background: none; color: var(--text); padding: 10px 16px; border-radius: 999px;
-  font-size: 14px; font-weight: 600; transition: background 0.2s, opacity 0.2s;
-}
-.power-btn:hover { background: var(--overlay); }
-.power-btn.busy { opacity: 0.4; }
-
 #toast {
   position: fixed; z-index: 2; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 24px);
   transform: translate(-50%, 20px); opacity: 0; pointer-events: none;

@@ -111,14 +111,6 @@ FRAME_ANCESTORS='self' https://homarr.example.com
 
 A plain app/link tile to the URL works without this.
 
-### Power
-The web UI has On, Standby and Off buttons. They send DDC/CI power mode
-(VCP `D6`) with the values in the `power` block of `config.json`. DDC only
-reaches the monitor through the GPU on its cable, so power commands work only
-when the monitor's active input is the server's. Whether On can wake the
-monitor over DDC after Standby or Off depends on the monitor; test it before
-relying on it, and keep the physical power button handy.
-
 ### Languages
 
 The web UI and the iPhone app are in English by default, with Brazilian

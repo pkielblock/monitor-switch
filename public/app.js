@@ -22,8 +22,6 @@ function applyLang() {
   $("lang").setAttribute("aria-label", t("language"));
   document.querySelectorAll("#lang button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === lang));
   document.querySelectorAll(".badge").forEach((b) => (b.textContent = t("lastSent")));
-  document.querySelector("#power .power-label")?.replaceChildren(t("power"));
-  document.querySelectorAll(".power-btn").forEach((b) => (b.textContent = STRINGS[lang].powerState[b.dataset.state]));
 }
 
 function toast(text, isError = false) {
@@ -56,38 +54,11 @@ async function switchTo(card) {
   }
 }
 
-async function powerTo(btn) {
-  btn.classList.add("busy");
-  try {
-    const res = await fetch(`api/power/${btn.dataset.state}`, { method: "POST" });
-    if (!res.ok) {
-      toast(t("failed", res.status), true);
-    } else {
-      toast(t("powerSent", STRINGS[lang].powerState[btn.dataset.state]));
-    }
-  } catch {
-    toast(t("unreachable"), true);
-  } finally {
-    btn.classList.remove("busy");
-  }
-}
-
 async function init() {
   const res = await fetch("api/config").catch(() => null);
   if (!res?.ok) return toast(t("unreachable"), true);
-  const { monitor, inputs, power } = await res.json();
+  const { monitor, inputs } = await res.json();
   $("monitor").textContent = monitor;
-
-  const panel = $("power");
-  panel.innerHTML = `<span class="power-label"></span>`;
-  power.forEach((state) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "power-btn";
-    btn.dataset.state = state;
-    btn.addEventListener("click", () => powerTo(btn));
-    panel.append(btn);
-  });
 
   const list = $("inputs");
   inputs.forEach((input, i) => {
