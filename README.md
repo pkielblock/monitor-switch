@@ -112,14 +112,12 @@ FRAME_ANCESTORS='self' https://homarr.example.com
 A plain app/link tile to the URL works without this.
 
 ### Power
-The web UI has On and Off buttons. They send DDC/CI power mode (VCP `D6`)
-with the values in the `power` block of `config.json`. Off uses `0x04`, the
-only sleep value the LG UltraFine 27US500-W reports (`capabilities`: `01` on,
-`04` off). Standby `0x02` was tried and did nothing. DDC only reaches the
-monitor through the GPU on its cable, so power commands work only when the
-monitor's active input is the server's. Whether On can wake the monitor over
-DDC after Off depends on the monitor; test it before relying on it, and keep
-the physical power button handy.
+The web UI has On, Standby and Off buttons. They send DDC/CI power mode
+(VCP `D6`) with the values in the `power` block of `config.json`. DDC only
+reaches the monitor through the GPU on its cable, so power commands work only
+when the monitor's active input is the server's. Whether On can wake the
+monitor over DDC after Standby or Off depends on the monitor; test it before
+relying on it, and keep the physical power button handy.
 
 ### Languages
 

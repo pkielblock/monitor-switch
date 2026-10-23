@@ -9,7 +9,7 @@ const STRINGS = {
     failed: "Switch failed ({0})",
     unreachable: "Server unreachable",
     power: "Power",
-    powerState: { on: "On", off: "Off" },
+    powerState: { on: "On", standby: "Standby", off: "Off" },
     powerSent: "Monitor {0}",
   },
   "pt-BR": {
@@ -20,7 +20,7 @@ const STRINGS = {
     failed: "Falha ao trocar ({0})",
     unreachable: "Servidor inacessível",
     power: "Energia",
-    powerState: { on: "Ligado", off: "Desligado" },
+    powerState: { on: "Ligado", standby: "Espera", off: "Desligado" },
     powerSent: "Monitor {0}",
   },
 };
