@@ -1,5 +1,11 @@
 type Input = { id: string; label: string; port: string; value: string; icon?: string };
-type Config = { monitor: string; vcp: string; i2cSourceAddr?: string; inputs: Input[] };
+type Config = {
+  monitor: string;
+  vcp: string;
+  i2cSourceAddr?: string;
+  inputs: Input[];
+  power?: Record<string, string>; // state -> VCP D6 value, e.g. { "standby": "0x02" }
+};
 
 // Monitor-specific DDC/CI settings live in config.json (see README).
 const CONFIG_PATH = process.env.CONFIG_PATH ?? new URL("./config.json", import.meta.url).pathname;
@@ -12,10 +18,10 @@ const FRAME_ANCESTORS = process.env.FRAME_ANCESTORS ?? "'self'";
 
 // ddcutil talks to a single I2C bus; run one command at a time.
 let queue: Promise<unknown> = Promise.resolve();
-function setInput(value: string): Promise<{ ok: boolean; output: string }> {
+function setVcp(code: string, value: string): Promise<{ ok: boolean; output: string }> {
   const args = ["ddcutil"];
   if (config.i2cSourceAddr) args.push(`--i2c-source-addr=${config.i2cSourceAddr}`);
-  args.push("setvcp", config.vcp, value);
+  args.push("setvcp", code, value);
   const run = async () => {
     try {
       const proc = Bun.spawn(args, { stdout: "pipe", stderr: "pipe" });
@@ -63,7 +69,18 @@ const server = Bun.serve({
       return json({
         monitor: config.monitor,
         inputs: config.inputs.map(({ id, label, port, icon }) => ({ id, label, port, icon })),
+        power: Object.keys(config.power ?? {}),
       });
+    }
+
+    const power = url.pathname.match(/^\/api\/power\/(\w+)$/);
+    if (power && req.method === "POST") {
+      const state = power[1];
+      const value = config.power?.[state];
+      if (!value) return json({ error: "unknown power state" }, 404);
+      const result = await setVcp("D6", value);
+      audit(req, server, `power:${state}`, result.ok ? "ok" : `error: ${result.output}`);
+      return result.ok ? json({ ok: true, power: state }) : json({ error: "ddcutil failed" }, 500);
     }
 
     const match = url.pathname.match(/^\/api\/input\/([\w-]+)$/);
@@ -71,7 +88,7 @@ const server = Bun.serve({
       const name = match[1];
       const input = inputs.get(name);
       if (!input) return json({ error: "unknown input" }, 404);
-      const result = await setInput(input.value);
+      const result = await setVcp(config.vcp, input.value);
       audit(req, server, `input:${name}`, result.ok ? "ok" : `error: ${result.output}`);
       return result.ok ? json({ ok: true, input: name }) : json({ error: "ddcutil failed" }, 500);
     }
