@@ -126,7 +126,7 @@ web UI. It reads the inputs from
 `/api/config`, so it needs no changes when you edit `config.json`. It is not
 on the App Store; build it yourself with Xcode:
 
-1. Requirements: a Mac with Xcode 16 or later, an iPhone on iOS 17 or later,
+1. Requirements: a macbook with Xcode 16 or later, an iPhone on iOS 17 or later,
    and an Apple ID signed in under Xcode > Settings > Accounts (a free account
    works, but its builds expire after 7 days).
 2. Set your signing team and a bundle id prefix:
