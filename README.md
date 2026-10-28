@@ -149,6 +149,18 @@ allowed only for local network addresses.
 Without Xcode, you can still use the web UI as a home-screen app: open the URL
 in Safari, then Share > **Add to Home Screen**.
 
+For a development-signed IPA, the embedded provisioning profile must include
+your iPhone and must not have expired. To install without signing it again,
+unzip the IPA and drag `Payload/MonitorSwitch.app` into Xcode's Devices and
+Simulators window for your connected iPhone. Rebuild with Xcode to renew a
+free account's seven-day profile. When updating an installation made with
+Sideloadly, keep its installed bundle identifier (which may have a team suffix)
+to preserve app data and avoid using another free-account app slot.
+
+Sideloadly error `7252` (certificate not found on the team) concerns its Apple
+signing request; changing the IPA's bundle identifier does not fix that request.
+An already signed build can instead be installed directly through Xcode.
+
 For Siri, widgets or the Action button, create a Shortcut with **Get Contents
 of URL**: method `POST`, URL `https://<host>/api/input/<id>`.
 
