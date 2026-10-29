@@ -28,7 +28,6 @@ My setup:
 
 | Button  | Port        | Device                     |
 |---------|-------------|----------------------------|
-| desktop | HDMI 1      | Desktop (Omarchy)          |
 | server  | HDMI 2      | Server (runs this)         |
 | macbook | DisplayPort | MacBook                    |
 
