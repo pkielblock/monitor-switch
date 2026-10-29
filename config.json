@@ -3,6 +3,7 @@
   "vcp": "xf4",
   "i2cSourceAddr": "x50",
   "inputs": [
+    { "id": "desktop", "label": "desktop", "port": "HDMI 1", "value": "0x0090", "icon": "desktop" },
     { "id": "server", "label": "server", "port": "HDMI 2", "value": "0x0091", "icon": "server" },
     { "id": "macbook", "label": "macbook", "port": "DisplayPort", "value": "0x00d0", "icon": "laptop" }
   ]
