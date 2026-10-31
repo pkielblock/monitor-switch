@@ -96,6 +96,23 @@ input was **last sent** from that device, not the live state.
    authentication: anyone who can reach it can switch your monitor, so do
    not expose it to the internet.
 
+6. **Update** later from the same folder: pull and rebuild.
+
+   ```sh
+   git pull --ff-only
+   docker compose up -d --build
+   ```
+
+### Icon
+
+One script draws every icon (the iPhone app icon, `public/icon.svg`,
+`public/icon-180/192/512.png`) and sets the manifest colors. Edit the script,
+never the images, then run it on a Mac:
+
+```sh
+swift scripts/icon.swift
+```
+
 ## Use
 
 ### Browser and dashboards
