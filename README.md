@@ -121,8 +121,9 @@ strings live in [`public/i18n.js`](public/i18n.js); app strings in
 
 ### iPhone app
 
-[`ios/`](ios) holds a native SwiftUI app with the same Rosé Pine look as the
-web UI. It reads the inputs from
+[`ios/`](ios) holds a native SwiftUI app with the same look as the web UI:
+black background, quiet white surfaces and one blue accent (`#346bf1`) for
+the selected language and the last-sent marker. It reads the inputs from
 `/api/config`, so it needs no changes when you edit `config.json`. It is not
 on the App Store; build it yourself with Xcode:
 
