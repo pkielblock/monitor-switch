@@ -10,7 +10,7 @@ struct MonitorSwitchApp: App {
             ContentView()
                 .environment(\.locale, Locale(identifier: language))
                 .preferredColorScheme(.dark)
-                .tint(Theme.accents[2])
+                .tint(Theme.accent)
         }
     }
 }

@@ -19,13 +19,12 @@ struct ContentView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
+            VStack(alignment: .leading, spacing: 16) {
                 header
-                VStack(spacing: 14) {
-                    ForEach(Array((config?.inputs ?? []).enumerated()), id: \.element.id) { index, input in
+                VStack(spacing: 8) {
+                    ForEach(config?.inputs ?? []) { input in
                         InputCard(
                             input: input,
-                            accent: Theme.accents[index % Theme.accents.count],
                             isLast: input.id == lastInput,
                             isBusy: input.id == busy
                         ) {
@@ -33,15 +32,16 @@ struct ContentView: View {
                         }
                     }
                 }
+                .id(config?.inputs.map(\.id) ?? [])
+                .transition(.opacity.combined(with: .offset(y: 4)))
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 28)
+            .padding(16)
+            .animation(.easeOut(duration: 0.2), value: config?.inputs.map(\.id) ?? [])
             .frame(maxWidth: 520)
             .frame(maxWidth: .infinity)
         }
         .refreshable { await load() }
-        .background(Theme.base.ignoresSafeArea())
-        .foregroundStyle(Theme.text)
+        .background(Theme.bg.ignoresSafeArea())
         .overlay(alignment: .bottom) { toastView }
         .sheet(isPresented: $showSettings) { SettingsView(serverURL: $serverURL) }
         .sensoryFeedback(.success, trigger: switched)
@@ -52,30 +52,31 @@ struct ContentView: View {
         .task(id: toast) {
             guard toast != nil else { return }
             try? await Task.sleep(for: .seconds(2.2))
-            withAnimation { toast = nil }
+            withAnimation(.easeOut(duration: 0.2)) { toast = nil }
         }
     }
 
     private var header: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(verbatim: "monitor-switch")
-                    .font(.system(size: 30, weight: .bold))
-                    .tracking(-0.6)
+                    .font(.system(size: 18, weight: .medium))
                 Text(verbatim: config?.monitor ?? " ")
-                    .font(.system(size: 14))
-                    .foregroundStyle(Theme.muted)
+                    .font(.system(size: 12).monospacedDigit())
+                    .foregroundStyle(.secondary)
             }
             Spacer()
             Button {
                 showSettings = true
             } label: {
-                Image(systemName: "gearshape")
-                    .font(.system(size: 18, weight: .medium))
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 15))
+                    .frame(width: 36, height: 36)
+                    .background(Theme.chip, in: Circle())
                     .frame(width: 44, height: 44)
-                    .panel(Circle())
+                    .contentShape(Circle())
             }
-            .foregroundStyle(Theme.muted)
+            .foregroundStyle(.secondary)
             .accessibilityLabel("Settings")
         }
     }
@@ -83,20 +84,20 @@ struct ContentView: View {
     @ViewBuilder private var toastView: some View {
         if let toast {
             Text(toast.text)
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(toast.isError ? Theme.love : Theme.text)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-                .background(Theme.surface, in: Capsule())
-                .overlay(Capsule().strokeBorder(toast.isError ? Theme.love : Theme.overlay))
-                .shadow(color: .black.opacity(0.25), radius: 15, y: 8)
-                .padding(.bottom, 24)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .font(.system(size: 13, weight: .medium).monospacedDigit())
+                .foregroundStyle(toast.isError ? Theme.bad : .primary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Theme.toast, in: .rect(cornerRadius: 12))
+                .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Theme.line))
+                .padding(16)
+                .transition(.opacity.combined(with: .offset(y: 4)))
         }
     }
 
     private func show(_ text: LocalizedStringKey, isError: Bool = false) {
-        withAnimation(.easeOut(duration: 0.25)) { toast = Toast(text: text, isError: isError) }
+        withAnimation(.easeOut(duration: 0.2)) { toast = Toast(text: text, isError: isError) }
     }
 
     private func load() async {
@@ -129,61 +130,58 @@ struct ContentView: View {
 
 struct InputCard: View {
     let input: Input
-    let accent: Color
     let isLast: Bool
     let isBusy: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 16) {
+            HStack(spacing: 12) {
                 Image(systemName: Theme.symbol(for: input.icon))
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundStyle(accent)
-                    .symbolEffect(.pulse, isActive: isBusy)
-                    .frame(width: 56, height: 56)
-                    .background(accent.opacity(0.16), in: .rect(cornerRadius: 18, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(accent.opacity(0.35)))
+                    .font(.system(size: 17))
+                    .frame(width: 40, height: 40)
+                    .background(Theme.chip, in: .rect(cornerRadius: 10))
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: input.label)
-                        .font(.system(size: 21, weight: .semibold))
+                        .font(.system(size: 15, weight: .medium))
                     Text(verbatim: input.port)
-                        .font(.system(size: 14))
-                        .foregroundStyle(Theme.muted)
+                        .font(.system(size: 12).monospacedDigit())
+                        .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 0)
-                Text("Last sent")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Theme.base)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(accent, in: Capsule())
+                if isBusy {
+                    ProgressView().controlSize(.small)
+                } else {
+                    HStack(spacing: 6) {
+                        Circle().fill(Theme.accent).frame(width: 6, height: 6)
+                        Text("Last sent")
+                    }
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
                     .opacity(isLast ? 1 : 0)
+                }
             }
-            .padding(20)
+            .padding(12)
         }
-        .buttonStyle(CardStyle(accent: accent, isLast: isLast))
-        .animation(.easeInOut(duration: 0.2), value: isLast)
+        .buttonStyle(CardStyle(isLast: isLast))
+        .animation(.easeOut(duration: 0.2), value: isLast)
         .accessibilityLabel(Text(verbatim: "\(input.label), \(input.port)"))
         .accessibilityValue(isLast ? Text("Last sent") : Text(verbatim: ""))
     }
 }
 
-/// The web UI's `.card`: surface panel, overlay fill and slight shrink while pressed,
-/// accent border and glow on the last-sent input.
+/// The web UI's `.card`: white 4% surface, white 8% for the last-sent input, a tiny press.
 struct CardStyle: ButtonStyle {
-    let accent: Color
     let isLast: Bool
 
     func makeBody(configuration: Configuration) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: 12, style: .continuous)
         configuration.label
-            .background(configuration.isPressed ? Theme.overlay : Theme.surface, in: shape)
-            .overlay(shape.strokeBorder(isLast ? accent : Theme.overlay, lineWidth: isLast ? 2 : 1))
-            .shadow(color: isLast ? accent.opacity(0.18) : .black.opacity(0.25), radius: 15, y: 8)
+            .foregroundStyle(.primary)
+            .background(isLast || configuration.isPressed ? Theme.raised : Theme.surface, in: shape)
             .contentShape(shape)
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
-            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }
 

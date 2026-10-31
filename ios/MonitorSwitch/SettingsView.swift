@@ -23,7 +23,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Server URL")
                 } footer: {
-                    Text("Address of your monitor-switch server, as you would open it in Safari. A LAN address such as http://192.168.1.10:7580 also works.")
+                    Text("Address of your monitor-switch server, as you would open it in Safari. A LAN address such as http://192.168.1.10:7580 also works")
                 }
                 .listRowBackground(Theme.surface)
 
@@ -39,8 +39,7 @@ struct SettingsView: View {
                 .listRowBackground(Theme.surface)
             }
             .scrollContentBackground(.hidden)
-            .background(Theme.base)
-            .foregroundStyle(Theme.text)
+            .background(Theme.bg)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -54,7 +53,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .presentationBackground(Theme.base)
+        .presentationBackground(Theme.bg)
         .interactiveDismissDisabled(serverURL.isEmpty)
         .onAppear { draft = serverURL }
     }
