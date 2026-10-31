@@ -1,14 +1,12 @@
 const LAST = "monitor-switch-last";
 const LANG = "monitor-switch-lang";
-// Rosé Pine: foam, rose, iris, gold, pine, love.
-const ACCENTS = ["#9ccfd8", "#ebbcba", "#c4a7e7", "#f6c177", "#31748f", "#eb6f92"];
-
+// Lucide icons (lucide-static 1.65.0, ISC), inlined because the CSP allows no CDN.
 const ICONS = {
-  desktop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
-  laptop: '<rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M2.5 19h19l-2-4h-15z"/>',
-  server: '<rect x="4" y="3.5" width="16" height="7" rx="1.5"/><rect x="4" y="13.5" width="16" height="7" rx="1.5"/><path d="M8 7h.01M8 17h.01M12 7h4M12 17h4"/>',
-  tv: '<rect x="2.5" y="5" width="19" height="13" rx="2"/><path d="m8 2 4 3 4-3M7 21h10"/>',
-  console: '<path d="M7 8h10a5 5 0 0 1 4.6 7l-.6 1.4a2.5 2.5 0 0 1-4.3.4L15 15H9l-1.7 1.8a2.5 2.5 0 0 1-4.3-.4L2.4 15A5 5 0 0 1 7 8Z"/><path d="M7 11v3M5.5 12.5h3M16 12h.01M18 13h.01"/>',
+  desktop: '<rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>',
+  laptop: '<path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z"/><path d="M20.054 15.987H3.946"/>',
+  server: '<rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/>',
+  tv: '<path d="m17 2-5 5-5-5"/><rect width="20" height="15" x="2" y="7" rx="2"/>',
+  console: '<line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>',
 };
 
 const $ = (id) => document.getElementById(id);
@@ -27,7 +25,7 @@ function applyLang() {
 function toast(text, isError = false) {
   const el = $("toast");
   el.textContent = text;
-  el.className = `panel show${isError ? " err" : ""}`;
+  el.className = `show${isError ? " err" : ""}`;
   clearTimeout(toast.t);
   toast.t = setTimeout(() => el.classList.remove("show"), 2200);
 }
@@ -61,12 +59,11 @@ async function init() {
   $("monitor").textContent = monitor;
 
   const list = $("inputs");
-  inputs.forEach((input, i) => {
+  inputs.forEach((input) => {
     const card = document.createElement("button");
-    card.className = "card panel";
+    card.className = "card";
     card.dataset.id = input.id;
     card.dataset.label = input.label;
-    card.style.setProperty("--accent", ACCENTS[i % ACCENTS.length]);
     card.innerHTML = `
       <span class="glyph"><svg viewBox="0 0 24 24">${ICONS[input.icon] ?? ICONS.desktop}</svg></span>
       <span class="text"><span class="label"></span><span class="port"></span></span>
